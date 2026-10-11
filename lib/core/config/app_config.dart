@@ -5,6 +5,10 @@ class AppConfig {
   /// - Android emulator uses 10.0.2.2 to reach host machine's localhost
   /// - Real Android device / Linux / Web uses localhost or network IP
   static String get apiBaseUrl {
+    const envUrl = String.fromEnvironment('API_BASE_URL');
+    if (envUrl.isNotEmpty) {
+      return envUrl;
+    }
     if (kIsWeb) {
       return 'http://localhost:5000/api/v1';
     }
