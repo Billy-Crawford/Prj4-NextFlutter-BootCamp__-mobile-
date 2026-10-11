@@ -66,6 +66,12 @@ class LocalDatabase {
     await db.delete('favorites', where: 'user_id = ?', whereArgs: [userId]);
   }
 
+  Future<void> clearAllCache() async {
+    final db = await database;
+    await db.delete('articles');
+    await db.delete('categories');
+  }
+
   Future<void> close() async {
     final db = await database;
     db.close();
