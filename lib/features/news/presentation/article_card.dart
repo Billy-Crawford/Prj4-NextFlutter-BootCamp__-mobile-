@@ -80,6 +80,7 @@ class ArticleCard extends ConsumerWidget {
                       child: Image.network(
                         article.imageUrl!,
                         fit: BoxFit.cover,
+                        cacheWidth: isFeatured ? 1080 : 720,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Container(
@@ -199,24 +200,28 @@ class ArticleCard extends ConsumerWidget {
                       const Spacer(),
                       // Favorite button
                       isFavAsync.maybeWhen(
-                        data: (isFav) => InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () async {
-                            final favRepo = ref.read(favoriteRepositoryProvider);
-                            if (isFav) {
-                              await favRepo.removeFavorite(article.id);
-                            } else {
-                              await favRepo.addFavorite(article.id);
-                            }
-                            ref.invalidate(isFavoriteProvider(article.id));
-                            ref.invalidate(favoritesListProvider);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Icon(
-                              isFav ? Icons.favorite : Icons.favorite_border,
-                              size: 20,
-                              color: isFav ? Colors.redAccent : (isDark ? Colors.white60 : Colors.black45),
+                        data: (isFav) => Semantics(
+                          button: true,
+                          label: isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () async {
+                              final favRepo = ref.read(favoriteRepositoryProvider);
+                              if (isFav) {
+                                await favRepo.removeFavorite(article.id);
+                              } else {
+                                await favRepo.addFavorite(article.id);
+                              }
+                              ref.invalidate(isFavoriteProvider(article.id));
+                              ref.invalidate(favoritesListProvider);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Icon(
+                                isFav ? Icons.favorite : Icons.favorite_border,
+                                size: 20,
+                                color: isFav ? Colors.redAccent : (isDark ? Colors.white60 : Colors.black45),
+                              ),
                             ),
                           ),
                         ),

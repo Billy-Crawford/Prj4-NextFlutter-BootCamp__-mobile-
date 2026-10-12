@@ -79,46 +79,58 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
         title: const Text('Détail'),
         actions: [
           // Font size adjust
-          IconButton(
-            icon: const Icon(Icons.format_size),
-            tooltip: 'Taille du texte',
-            onPressed: () {
-              setState(() {
-                if (_fontScale >= 1.3) {
-                  _fontScale = 0.9;
-                } else {
-                  _fontScale += 0.15;
-                }
-              });
-            },
+          Semantics(
+            label: 'Modifier la taille du texte',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Icons.format_size),
+              tooltip: 'Taille du texte',
+              onPressed: () {
+                setState(() {
+                  if (_fontScale >= 1.3) {
+                    _fontScale = 0.9;
+                  } else {
+                    _fontScale += 0.15;
+                  }
+                });
+              },
+            ),
           ),
           // Share button
           articleAsync.maybeWhen(
-            data: (article) => IconButton(
-              icon: const Icon(Icons.share_outlined),
-              tooltip: 'Partager',
-              onPressed: () => _shareArticle(article),
+            data: (article) => Semantics(
+              label: 'Partager l\'article',
+              button: true,
+              child: IconButton(
+                icon: const Icon(Icons.share_outlined),
+                tooltip: 'Partager',
+                onPressed: () => _shareArticle(article),
+              ),
             ),
             orElse: () => const SizedBox.shrink(),
           ),
           // Favorite button
           favAsync.maybeWhen(
-            data: (isFav) => IconButton(
-              icon: Icon(
-                isFav ? Icons.favorite : Icons.favorite_border,
-                color: isFav ? Colors.redAccent : null,
+            data: (isFav) => Semantics(
+              label: isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
+              button: true,
+              child: IconButton(
+                icon: Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: isFav ? Colors.redAccent : null,
+                ),
+                tooltip: isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
+                onPressed: () async {
+                  final favRepo = ref.read(favoriteRepositoryProvider);
+                  if (isFav) {
+                    await favRepo.removeFavorite(widget.articleId);
+                  } else {
+                    await favRepo.addFavorite(widget.articleId);
+                  }
+                  ref.invalidate(isFavoriteProvider(widget.articleId));
+                  ref.invalidate(favoritesListProvider);
+                },
               ),
-              tooltip: isFav ? 'Retirer des favoris' : 'Ajouter aux favoris',
-              onPressed: () async {
-                final favRepo = ref.read(favoriteRepositoryProvider);
-                if (isFav) {
-                  await favRepo.removeFavorite(widget.articleId);
-                } else {
-                  await favRepo.addFavorite(widget.articleId);
-                }
-                ref.invalidate(isFavoriteProvider(widget.articleId));
-                ref.invalidate(favoritesListProvider);
-              },
             ),
             orElse: () => const SizedBox.shrink(),
           ),
@@ -247,11 +259,16 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                     borderRadius: BorderRadius.circular(16),
                     child: Hero(
                       tag: 'article-img-${article.id}',
-                      child: Image.network(
-                        article.imageUrl!,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+                      child: Semantics(
+                        label: 'Image de couverture pour l\'article: ${article.title}',
+                        image: true,
+                        child: Image.network(
+                          article.imageUrl!,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          cacheWidth: 1080,
+                          errorBuilder: (ctx, err, st) => const SizedBox.shrink(),
+                        ),
                       ),
                     ),
                   ),
@@ -298,16 +315,20 @@ class _ArticleDetailScreenState extends ConsumerState<ArticleDetailScreen> {
                 if (article.url.isNotEmpty)
                   SizedBox(
                     width: double.infinity,
-                    child: FilledButton.icon(
-                      icon: const Icon(Icons.open_in_browser),
-                      label: const Text('Lire l\'article complet à la source'),
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                    child: Semantics(
+                      label: 'Ouvrir l\'article complet dans le navigateur externe',
+                      button: true,
+                      child: FilledButton.icon(
+                        icon: const Icon(Icons.open_in_browser),
+                        label: const Text('Lire l\'article complet à la source'),
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
                         ),
+                        onPressed: () => _openUrl(context, article.url),
                       ),
-                      onPressed: () => _openUrl(context, article.url),
                     ),
                   ),
                 const SizedBox(height: 24),

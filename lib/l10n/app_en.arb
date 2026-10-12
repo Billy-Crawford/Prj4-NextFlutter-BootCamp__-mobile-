@@ -1,0 +1,91 @@
+{
+  "@@locale": "en",
+  "appTitle": "NewsPulse",
+  "tabNews": "News",
+  "tabSearch": "Search",
+  "tabCategories": "Categories",
+  "tabFavorites": "Favorites",
+  "allCategories": "All",
+  "readingTimeMinutes": "{count} min read",
+  "@readingTimeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoMinutes": "{count}m ago",
+  "@publishedAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoHours": "{count}h ago",
+  "@publishedAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoDays": "{count}d ago",
+  "@publishedAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineModeBanner": "Offline Mode: Data served from local SQLite cache.",
+  "articleDetails": "Article Details",
+  "fontSizeTooltip": "Font Size",
+  "shareTooltip": "Share",
+  "addFavoriteTooltip": "Add to favorites",
+  "removeFavoriteTooltip": "Remove from favorites",
+  "shareSuccessMessage": "Article link copied to clipboard!",
+  "readSourceArticle": "Read full article at source",
+  "searchHint": "Search for topics or keywords...",
+  "searchEmptyTitle": "Explore thousands of headlines",
+  "searchEmptySubtitle": "Type a keyword or choose a suggested topic above to start searching.",
+  "searchNoResults": "No results for \"{query}\"",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noFavoritesTitle": "No favorite articles",
+  "noFavoritesSubtitle": "Save your favorite stories to read them anytime, even offline.",
+  "exploreNews": "Explore Headlines",
+  "savedArticles": "Saved Articles",
+  "undo": "Undo",
+  "delete": "Delete",
+  "removedFromFavorites": "\"{title}\" removed from favorites",
+  "@removedFromFavorites": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTitle": "Profile & Settings",
+  "clearCache": "Clear local SQLite cache",
+  "clearCacheSubtitle": "Frees storage and forces fresh API fetching",
+  "cacheClearedMessage": "Local cache cleared successfully.",
+  "logout": "Log out",
+  "login": "Log In",
+  "register": "Sign Up",
+  "loginTitle": "Your real-time news portal",
+  "emailLabel": "Email address",
+  "passwordLabel": "Password",
+  "fillDemo": "Fill Demo Credentials",
+  "retry": "Retry",
+  "lightMode": "Light Mode",
+  "darkMode": "Dark Mode",
+  "systemMode": "System Mode",
+  "languageLabel": "Language (FR / EN)",
+  "languageSwitched": "Language changed"
+}

@@ -1,0 +1,91 @@
+{
+  "@@locale": "fr",
+  "appTitle": "NewsPulse",
+  "tabNews": "Actualités",
+  "tabSearch": "Recherche",
+  "tabCategories": "Catégories",
+  "tabFavorites": "Favoris",
+  "allCategories": "Toutes",
+  "readingTimeMinutes": "{count} min de lecture",
+  "@readingTimeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoMinutes": "Il y a {count} min",
+  "@publishedAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoHours": "Il y a {count} h",
+  "@publishedAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "publishedAgoDays": "Il y a {count} j",
+  "@publishedAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offlineModeBanner": "Mode hors ligne : articles issus du cache SQLite local.",
+  "articleDetails": "Détail de l'article",
+  "fontSizeTooltip": "Taille du texte",
+  "shareTooltip": "Partager",
+  "addFavoriteTooltip": "Ajouter aux favoris",
+  "removeFavoriteTooltip": "Retirer des favoris",
+  "shareSuccessMessage": "Lien de l'article copié dans le presse-papier !",
+  "readSourceArticle": "Lire l'article complet à la source",
+  "searchHint": "Rechercher un sujet ou mot-clé...",
+  "searchEmptyTitle": "Explorez des milliers d'actualités",
+  "searchEmptySubtitle": "Entrez un mot-clé ou choisissez une suggestion ci-dessus pour lancer votre recherche.",
+  "searchNoResults": "Aucun résultat pour \"{query}\"",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noFavoritesTitle": "Aucun article favori",
+  "noFavoritesSubtitle": "Enregistrez vos articles préférés pour les retrouver rapidement même hors ligne.",
+  "exploreNews": "Explorer les actualités",
+  "savedArticles": "Articles sauvegardés",
+  "undo": "Annuler",
+  "delete": "Supprimer",
+  "removedFromFavorites": "\"{title}\" retiré des favoris",
+  "@removedFromFavorites": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTitle": "Profil & Paramètres",
+  "clearCache": "Vider le cache local SQLite",
+  "clearCacheSubtitle": "Libère l'espace et force le rechargement API",
+  "cacheClearedMessage": "Cache local vidé avec succès.",
+  "logout": "Se déconnecter",
+  "login": "Connexion",
+  "register": "Inscription",
+  "loginTitle": "Votre portail d'actualités en temps réel",
+  "emailLabel": "Adresse e-mail",
+  "passwordLabel": "Mot de passe",
+  "fillDemo": "Remplir identifiants de test",
+  "retry": "Réessayer",
+  "lightMode": "Mode clair",
+  "darkMode": "Mode sombre",
+  "systemMode": "Mode système",
+  "languageLabel": "Langue (FR / EN)",
+  "languageSwitched": "Langue changée"
+}

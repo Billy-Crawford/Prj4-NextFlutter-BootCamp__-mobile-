@@ -30,7 +30,7 @@ class FavoritesScreen extends ConsumerWidget {
         itemBuilder: (context, index) => const ArticleCardSkeleton(),
       ),
       error: (err, _) => Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,7 @@ class FavoritesScreen extends ConsumerWidget {
       data: (favorites) {
         if (favorites.isEmpty) {
           return Center(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(32.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

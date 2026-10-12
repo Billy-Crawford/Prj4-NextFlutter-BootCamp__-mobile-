@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../categories/presentation/categories_screen.dart';
 import '../../favorites/presentation/favorites_screen.dart';
@@ -17,13 +19,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentIndex = 0;
-
-  final List<String> _tabTitles = const [
-    'À la une',
-    'Recherche',
-    'Catégories',
-    'Favoris',
-  ];
 
   void _showProfileDialog(BuildContext context) {
     final user = ref.read(authStateProvider).value;
@@ -115,9 +110,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.language_rounded),
+                title: Text(AppLocalizations.of(context)?.languageLabel ?? 'Langue'),
+                subtitle: Text(
+                  ref.watch(localeProvider).languageCode.toUpperCase() == 'FR'
+                      ? 'Français (FR)'
+                      : 'English (EN)',
+                ),
+                trailing: TextButton(
+                  onPressed: () {
+                    ref.read(localeProvider.notifier).toggleLocale();
+                  },
+                  child: const Text('Changer / Switch'),
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.cleaning_services_outlined),
+                title: Text(AppLocalizations.of(context)?.clearCache ?? 'Vider le cache local SQLite'),
+                subtitle: Text(AppLocalizations.of(context)?.clearCacheSubtitle ?? 'Libère l\'espace et force le rechargement API'),
+                onTap: () async {
+                  final db = ref.read(localDatabaseProvider);
+                  await db.clearAllCache();
+                  if (ctx.mounted) {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppLocalizations.of(context)?.cacheClearedMessage ?? 'Cache local vidé avec succès.')),
+                    );
+                    ref.invalidate(feedNewsProvider);
+                  }
+                },
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.logout, color: Colors.redAccent),
-                title: const Text('Se déconnecter',
-                    style: TextStyle(color: Colors.redAccent)),
+                title: Text(AppLocalizations.of(context)?.logout ?? 'Se déconnecter',
+                    style: const TextStyle(color: Colors.redAccent)),
                 onTap: () {
                   Navigator.pop(ctx);
                   ref.read(authControllerProvider.notifier).signOut();
@@ -133,6 +161,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
+    final currentLocale = ref.watch(localeProvider);
+
+    final tabTitles = [
+      l10n?.tabNews ?? 'À la une',
+      l10n?.tabSearch ?? 'Recherche',
+      l10n?.tabCategories ?? 'Catégories',
+      l10n?.tabFavorites ?? 'Favoris',
+    ];
 
     final screens = [
       const NewsListScreen(),
@@ -151,24 +188,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10),
+            Semantics(
+              label: 'Logo de l\'application NewsPulse',
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.newspaper, color: Colors.white, size: 20),
               ),
-              child: const Icon(Icons.newspaper, color: Colors.white, size: 20),
             ),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'NewsPulse',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  l10n?.appTitle ?? 'NewsPulse',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  _tabTitles[_currentIndex],
+                  tabTitles[_currentIndex],
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.normal,
@@ -180,21 +220,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
         actions: [
-          // Theme Switcher (Dark / Light)
-          IconButton(
-            icon: Icon(
-              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+          // Language Switcher (FR / EN)
+          Semantics(
+            button: true,
+            label: 'Basculer la langue. Langue actuelle: ${currentLocale.languageCode.toUpperCase()}',
+            child: TextButton(
+              style: TextButton.styleFrom(
+                minimumSize: const Size(40, 36),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+              ),
+              onPressed: () {
+                ref.read(localeProvider.notifier).toggleLocale();
+              },
+              child: Text(
+                currentLocale.languageCode.toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
             ),
-            tooltip: isDark ? 'Mode clair' : 'Mode sombre',
-            onPressed: () {
-              ref.read(themeModeProvider.notifier).toggle();
-            },
+          ),
+          // Theme Switcher (Dark / Light)
+          Semantics(
+            button: true,
+            label: isDark ? (l10n?.lightMode ?? 'Activer le mode clair') : (l10n?.darkMode ?? 'Activer le mode sombre'),
+            child: IconButton(
+              icon: Icon(
+                isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              ),
+              tooltip: isDark ? (l10n?.lightMode ?? 'Mode clair') : (l10n?.darkMode ?? 'Mode sombre'),
+              onPressed: () {
+                ref.read(themeModeProvider.notifier).toggle();
+              },
+            ),
           ),
           // User Profile & Settings
-          IconButton(
-            icon: const Icon(Icons.account_circle_outlined),
-            tooltip: 'Profil',
-            onPressed: () => _showProfileDialog(context),
+          Semantics(
+            button: true,
+            label: l10n?.profileTitle ?? 'Profil et paramètres',
+            child: IconButton(
+              icon: const Icon(Icons.account_circle_outlined),
+              tooltip: l10n?.profileTitle ?? 'Profil',
+              onPressed: () => _showProfileDialog(context),
+            ),
           ),
         ],
       ),
@@ -209,26 +279,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             _currentIndex = index;
           });
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.newspaper_outlined),
-            selectedIcon: Icon(Icons.newspaper),
-            label: 'Actualités',
+            icon: const Icon(Icons.newspaper_outlined),
+            selectedIcon: const Icon(Icons.newspaper),
+            label: l10n?.tabNews ?? 'Actualités',
           ),
           NavigationDestination(
-            icon: Icon(Icons.search_rounded),
-            selectedIcon: Icon(Icons.saved_search_rounded),
-            label: 'Recherche',
+            icon: const Icon(Icons.search_rounded),
+            selectedIcon: const Icon(Icons.saved_search_rounded),
+            label: l10n?.tabSearch ?? 'Recherche',
           ),
           NavigationDestination(
-            icon: Icon(Icons.category_outlined),
-            selectedIcon: Icon(Icons.category),
-            label: 'Catégories',
+            icon: const Icon(Icons.category_outlined),
+            selectedIcon: const Icon(Icons.category),
+            label: l10n?.tabCategories ?? 'Catégories',
           ),
           NavigationDestination(
-            icon: Icon(Icons.favorite_border_rounded),
-            selectedIcon: Icon(Icons.favorite_rounded),
-            label: 'Favoris',
+            icon: const Icon(Icons.favorite_border_rounded),
+            selectedIcon: const Icon(Icons.favorite_rounded),
+            label: l10n?.tabFavorites ?? 'Favoris',
           ),
         ],
       ),
