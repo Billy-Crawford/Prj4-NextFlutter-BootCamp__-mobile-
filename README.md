@@ -18,7 +18,7 @@ Application mobile d'actualités connectée à une API REST réelle, développé
 | **Performance (60 FPS constant)** | ✅ **Conforme** | Images avec dimensionnement et mise en cache mémoire (`cacheWidth: 720/1080`), constructeurs `const`, suppression de tout jank visuel et évitement des rebuilds superflus. |
 | **Accessibilité (a11y)** | ✅ **Conforme** | Balises `Semantics` explicites sur tous les éléments interactifs (boutons d'action, sélecteur de langue, favoris, images Hero, logo, champs de saisie). |
 | **Internationalisation (i18n)** | ✅ **Conforme** | Support complet Français (FR) et Anglais (EN) via `flutter_localizations` & fichiers ARB ([`app_fr.arb`](lib/l10n/app_fr.arb), [`app_en.arb`](lib/l10n/app_en.arb)) avec bascule dynamique en temps réel via [`LocaleNotifier`](lib/core/providers/locale_provider.dart). |
-| **CI/CD automatisé** | ✅ **Conforme** | Pipeline GitHub Actions configuré dans [`.github/workflows/ci.yml`](.github/workflows/ci.yml) exécutant `flutter analyze`, l'ensemble des tests et le build de l'APK. |
+| **CI/CD automatisé** | ✅ **Conforme (CI Verte)** | Pipeline GitHub Actions configuré dans [`.github/workflows/ci.yml`](.github/workflows/ci.yml) exécutant l'analyse statique (`flutter analyze`) et l'intégralité de la suite de tests. |
 | **Analyse statique propre** | ✅ **Conforme** | `flutter analyze` s'exécute avec **0 avertissement, 0 erreur**. |
 | **CHANGELOG.md professionnel** | ✅ **Conforme** | Historique complet et documenté de 3 versions sémantiques ([`CHANGELOG.md`](CHANGELOG.md) - v1.0.0, v1.1.0, v1.2.0). |
 
